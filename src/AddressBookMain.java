@@ -65,7 +65,17 @@ public class AddressBookMain {
                     }
                 }
 
-                case "3" -> deleteContact();
+                case "3" -> {
+                    System.out.println("Enter a number to User Name for delete");
+                    String personName = sc.nextLine();
+
+                    for (Contact c : myContactList) {
+                        if (c.getFirstname().equals(personName)) {
+                            deleteContact(myContactList, c);
+                            break;
+                        }
+                    }
+                }
 
 
                 case "4" -> displayContact(myContactList);
@@ -94,7 +104,8 @@ public class AddressBookMain {
     }
 
 
-    public static void deleteContact() {
+    public static void deleteContact(ArrayList<Contact> myContactList, Contact c) {
+        myContactList.remove(c);
     }
 
     public static void displayContact(ArrayList<Contact> myContactList) {
