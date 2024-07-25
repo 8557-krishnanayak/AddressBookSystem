@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class AddressBookMain {
@@ -31,10 +32,18 @@ public class AddressBookMain {
                     String zip = sc.nextLine();
                     System.out.println("Enter City Name: ");
                     String city = sc.nextLine();
+                    System.out.println("Enter State Name: ");
+                    String state = sc.nextLine();
                     System.out.println("Enter Email Name: ");
                     String email = sc.nextLine();
-                    Contact c = new Contact(firstname, lastname, phoneNumber, address, zip, city, email);
-                    myContactList.add(c);
+
+                    Contact isContactAvailable = findContactByName(firstname, myContactList);
+                    if (isContactAvailable == null) {
+                        Contact c = new Contact(firstname, lastname, phoneNumber, address, zip, city, email, state);
+                        myContactList.add(c);
+                    } else {
+                        System.out.println("User Already exist with this user-name i.e. FirstName.");
+                    }
                 }
 
                 case "2" -> {
@@ -57,23 +66,25 @@ public class AddressBookMain {
                     System.out.println("Enter the update text:");
                     String updateVal = sc.nextLine();
 
-                    for (Contact c : myContactList) {
-                        if (c.getFirstname().equals(personName)) {
-                            editContact(c, decide, updateVal);
-                            break;
-                        }
+                    Contact isContactAvailable = findContactByName(personName, myContactList);
+                    if (isContactAvailable != null) {
+                        editContact(isContactAvailable, decide, updateVal);
+                        System.out.println("Update SuccessFull");
+                    } else {
+                        System.out.println("No Such User exist with this user-name i.e. FirstName.");
                     }
+
                 }
 
                 case "3" -> {
                     System.out.println("Enter a number to User Name for delete");
                     String personName = sc.nextLine();
-
-                    for (Contact c : myContactList) {
-                        if (c.getFirstname().equals(personName)) {
-                            deleteContact(myContactList, c);
-                            break;
-                        }
+                    Contact isContactAvailable = findContactByName(personName, myContactList);
+                    if (isContactAvailable != null) {
+                        deleteContact(myContactList, isContactAvailable);
+                        System.out.println("Delete SuccessFull");
+                    } else {
+                        System.out.println("No Such User exist with this user-name i.e. FirstName.");
                     }
                 }
 
@@ -95,7 +106,7 @@ public class AddressBookMain {
             case "2" -> contact.setLastname(updateVal);
             case "3" -> contact.setAddress(updateVal);
             case "4" -> contact.setCity(updateVal);
-//            case "5" -> contact.setState(updateVal);
+            case "5" -> contact.setState(updateVal);
             case "6" -> contact.setZip(updateVal);
             case "7" -> contact.setPhoneNumber(updateVal);
             case "8" -> contact.setEmail(updateVal);
@@ -112,5 +123,13 @@ public class AddressBookMain {
         for (Contact c : myContactList) {
             System.out.println(c);
         }
+    }
+
+    public static Contact findContactByName(String personName, ArrayList<Contact> myList) {
+        for (Contact c : myList) {
+            if (c.getFirstname().equals(personName))
+                return c;
+        }
+        return null;
     }
 }
